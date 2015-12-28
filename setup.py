@@ -8,12 +8,12 @@ from setuptools import setup
 classifiers = [
     'Development Status :: 4 - Beta',
     'Intended Audience :: Developers',
-    'Intended Audience :: System Administrators'
+    'Intended Audience :: System Administrators',
     'Environment :: Console',
     'License :: OSI Approved :: Apache Software License',
     'Programming Language :: Python',
     'Programming Language :: Python :: 2.7',
-    'Topic :: System :: Systems Administration'
+    'Topic :: System :: Systems Administration',
     'Topic :: Database',
     'Topic :: Text Processing',
     'Topic :: Internet',

@@ -1,10 +1,14 @@
 es2csv
-===========
+======
 
 A CLI tool for exporting data from Elasticsearch into a CSV file
-------------
+----------------------------------------------------------------
 
 Command line utility, written in Python, for querying Elasticsearch in Lucene query syntax and for exporting documents into a CSV file. This tool can query bulk docs in multiple indices and get only selected fields, this reduces query execution time.
+
+Quick Look Demo
+---------------
+.. figure:: https://cloud.githubusercontent.com/assets/7491121/12016825/59eb5f82-ad58-11e5-81eb-871a49e39c37.gif
 
 Installation
 ------------
@@ -14,6 +18,12 @@ From source:
 .. code-block:: bash
 
     $ pip install git+https://github.com/taraslayshchuk/es2csv.git
+
+From pip:
+
+.. code-block:: bash
+
+    $ pip install es2csv
 
 Usage
 -----
@@ -35,6 +45,7 @@ Usage
   -k, --kibana_nested                      Format nested fields in Kibana style.
   --debug                                  Debug mode on.
   -h, --help                               show this help message and exit
+
 Examples
 --------
 Searching on localhost and save to database.csv
@@ -174,14 +185,14 @@ An JSON document example
 
 A CSV file in Kibana style format
 
-.. code-block:: csv
+.. code-block::
 
   body,comments.age,comments.comment,comments.date,comments.name,comments.stars,tags,title
   Making your money work...,"28,31","Great article,More like this please","2014-09-01,2014-10-22","John Smith,Alice White","4,5","cash,shares",Nest eggs
 
 A CSV file in default format
 
-.. code-block:: csv
+.. code-block::
 
   body,comments.0.age,comments.0.comment,comments.0.date,comments.0.name,comments.0.stars,comments.1.age,comments.1.comment,comments.1.date,comments.1.name,comments.1.stars,tags.0,tags.1,title
   Making your money work...,28,Great article,2014-09-01,John Smith,4,31,More like this please,2014-10-22,Alice White,5,cash,shares,Nest eggs
