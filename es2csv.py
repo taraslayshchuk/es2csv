@@ -126,7 +126,7 @@ class Es2csv:
                        progressbar.Percentage(),
                        progressbar.FormatLabel('] [%(elapsed)s] ['),
                        progressbar.ETA(), '] [',
-                       progressbar.FileTransferSpeed(), ']'
+                       progressbar.FileTransferSpeed('docs'), ']'
                        ]
             bar = progressbar.ProgressBar(widgets=widgets, maxval=self.num_results).start()
 
@@ -202,7 +202,7 @@ class Es2csv:
                            progressbar.Percentage(),
                            progressbar.FormatLabel('] [%(elapsed)s] ['),
                            progressbar.ETA(), '] [',
-                           progressbar.FileTransferSpeed(), ']'
+                           progressbar.FileTransferSpeed('lines'), ']'
                            ]
                 bar = progressbar.ProgressBar(widgets=widgets, maxval=self.num_results).start()
 
