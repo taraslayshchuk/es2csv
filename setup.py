@@ -23,6 +23,9 @@ classifiers = [
 with open('README.rst') as file_readme:
     readme = file_readme.read()
 
+with open('HISTORY.rst') as history_file:
+    history = history_file.read()
+
 with open('requirements.txt') as file_requirements:
     requirements = file_requirements.read().splitlines()
 
@@ -61,7 +64,7 @@ settings.update(
     name='es2csv',
     version=get_version(),
     description=get_description(),
-    long_description=readme,
+    long_description='%s\n\n%s' % (readme, history),
     author='Taras Layshchuk',
     author_email='taraslayshchuk[@]gmail[dot]com',
     license='Apache 2.0',

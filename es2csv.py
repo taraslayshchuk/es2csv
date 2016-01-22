@@ -131,7 +131,7 @@ class Es2csv:
             bar = progressbar.ProgressBar(widgets=widgets, maxval=self.num_results).start()
 
             while total_lines != self.num_results:
-                res = self.es_conn.scroll(scroll=self.scroll_time, body=res['_scroll_id'])
+                res = self.es_conn.scroll(scroll=self.scroll_time, scroll_id=res['_scroll_id'])
                 if res['_scroll_id'] not in self.scroll_ids:
                     self.scroll_ids.append(res['_scroll_id'])
 
@@ -236,6 +236,7 @@ def main():
     p.add_argument('-d', '--delimiter', dest='delimiter', default=',', type=str, help='Delimiter to use in CSV file. Default is "%(default)s".')
     p.add_argument('-m', '--max', dest='max_results', default=0, type=int, metavar='INTEGER', help='Maximum number of results to return. Default is %(default)s.')
     p.add_argument('-k', '--kibana_nested', dest='kibana_nested', action='store_true', help='Format nested fields in Kibana style.')
+    p.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__, help='Show version and exit.')
     p.add_argument('--debug', dest='debug_mode', action='store_true', help='Debug mode on.')
 
     if len(sys.argv) == 1:
