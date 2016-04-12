@@ -3,6 +3,10 @@
 Release Changelog
 =================
 
+1.0.2 (2016-04-12)
+------------------
+- Added --raw_query(-r) argument for using the native Query DSL format.
+
 1.0.1 (2016-01-22)
 ------------------
 - Fixed support elasticsearch-1.4.0.
