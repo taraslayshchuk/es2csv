@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 """
 title:           A CLI tool for exporting data from Elasticsearch into a CSV file.
-description:     Command line utility, written in Python, for querying Elasticsearch in Lucene query syntax and for exporting documents into a CSV file.
+description:     Command line utility, written in Python, for querying Elasticsearch in Lucene query syntax or Query DSL syntax and exporting result as documents into a CSV file.
 usage:           es2csv -q '*' -i _all -o ~/file.csv -k -m 100
+                 es2csv -q '{"query": {"match_all": {}}}' -r -i _all -o ~/file.csv
                  es2csv -q '*' -i logstash-2015-01-* -f host status message -o ~/file.csv
                  es2csv -q 'host: localhost' -i logstash-2015-01-01 logstash-2015-01-02 -f host status message -o ~/file.csv
                  es2csv -q 'host: localhost AND status: GET' -u http://kibana.com:80/es/ -o ~/file.csv
                  es2csv -q '*' -t dev prod -u http://login:password@kibana.com:6666/es/ -o ~/file.csv
+                 es2csv -q '{"query": {"match_all": {}}, "filter":{"term": {"tags": "dev"}}}' -r -u http://login:password@kibana.com:6666/es/ -o ~/file.csv
 """
 import os
 import sys
@@ -85,24 +87,27 @@ class Es2csv:
 
     @retry(elasticsearch.exceptions.ConnectionError, tries=TIMES_TO_TRY)
     def search_query(self):
-        query = self.opts.query if not self.opts.tags else '%s AND tags:%s' % (
-            self.opts.query, '(%s)' % ' AND '.join(self.opts.tags))
-
-        if self.opts.debug_mode:
-            print('Using these indices: %s' % ', '.join(self.opts.index_prefixes))
-            print('Query: %s' % query)
-            print('Output field(s): %s' % ', '.join(self.opts.fields))
-
         search_args = dict(
             index=','.join(self.opts.index_prefixes),
-            q=query,
             search_type='scan',
             scroll=self.scroll_time,
             size=self.scroll_size
         )
+        if self.opts.raw_query:
+            query = json.loads(self.opts.query)
+            search_args['body'] = query
+        else:
+            query = self.opts.query if not self.opts.tags else '%s AND tags:%s' % (
+                 self.opts.query, '(%s)' % ' AND '.join(self.opts.tags))
+            search_args['q'] = query
 
         if '_all' not in self.opts.fields:
             search_args['fields'] = ','.join(self.opts.fields)
+
+        if self.opts.debug_mode:
+            print('Using these indices: %s' % ', '.join(self.opts.index_prefixes))
+            print('Query[%s]: %s' % (('Query DSL', json.dumps(query)) if self.opts.raw_query else ('Lucene', query)))
+            print('Output field(s): %s' % ', '.join(self.opts.fields))
 
         res = self.es_conn.search(**search_args)
 
@@ -236,6 +241,7 @@ def main():
     p.add_argument('-d', '--delimiter', dest='delimiter', default=',', type=str, help='Delimiter to use in CSV file. Default is "%(default)s".')
     p.add_argument('-m', '--max', dest='max_results', default=0, type=int, metavar='INTEGER', help='Maximum number of results to return. Default is %(default)s.')
     p.add_argument('-k', '--kibana_nested', dest='kibana_nested', action='store_true', help='Format nested fields in Kibana style.')
+    p.add_argument('-r', '--raw_query', dest='raw_query', action='store_true', help='Switch query format in the Query DSL.')
     p.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__, help='Show version and exit.')
     p.add_argument('--debug', dest='debug_mode', action='store_true', help='Debug mode on.')
 

@@ -4,7 +4,7 @@ es2csv
 A CLI tool for exporting data from Elasticsearch into a CSV file
 ----------------------------------------------------------------
 
-Command line utility, written in Python, for querying Elasticsearch in Lucene query syntax and for exporting documents into a CSV file. This tool can query bulk docs in multiple indices and get only selected fields, this reduces query execution time.
+Command line utility, written in Python, for querying Elasticsearch in Lucene query syntax or Query DSL syntax and exporting result as documents into a CSV file. This tool can query bulk docs in multiple indices and get only selected fields, this reduces query execution time.
 
 Quick Look Demo
 ---------------
@@ -31,7 +31,7 @@ Usage
 
  $ es2csv [-h] -q QUERY [-u URL] [-i INDEX [INDEX ...]]
           [-t TAGS [TAGS ...]] -o FILE [-f FIELDS [FIELDS ...]]
-          [-d DELIMITER] [-m INTEGER] [-k] [--debug]
+          [-d DELIMITER] [-m INTEGER] [-k] [-r] [-v] [--debug]
 
  Arguments:
   -q, --query QUERY                        Query string in Lucene syntax.               [required]
@@ -43,6 +43,8 @@ Usage
   -d, --delimiter DELIMITER                Delimiter to use in CSV file. Default is ",".
   -m, --max INTEGER                        Maximum number of results to return. Default is 0.
   -k, --kibana_nested                      Format nested fields in Kibana style.
+  -r, --raw_query                          Switch query format in the Query DSL.
+  -v, --version                            Show version and exit.
   --debug                                  Debug mode on.
   -h, --help                               show this help message and exit
 
@@ -53,6 +55,12 @@ Searching on localhost and save to database.csv
 .. code-block:: bash
 
   $ es2csv -q 'host: localhost' -o database.csv
+
+Same in Query DSL syntax
+
+.. code-block:: bash
+
+  $ es2csv -r -q '{"query": {"match": {"host": "localhost"}}}' -o database.csv
   
 With tag
 
