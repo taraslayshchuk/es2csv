@@ -44,6 +44,7 @@ Usage
   -m, --max INTEGER                        Maximum number of results to return. Default is 0.
   -k, --kibana_nested                      Format nested fields in Kibana style.
   -r, --raw_query                          Switch query format in the Query DSL.
+  -e, --meta_fields                        Add meta-fields in output.
   -v, --version                            Show version and exit.
   --debug                                  Debug mode on.
   -h, --help                               show this help message and exit
@@ -140,6 +141,12 @@ Selecting all fields, by default
 .. code-block:: bash
 
   $ es2csv -f _all -q 'host: localhost' -o database.csv
+
+Selecting meta-fields: _id, _index, _score, _type
+
+.. code-block:: bash
+
+  $ es2csv -e -f _all -q 'host: localhost' -o database.csv
 
 Selecting nested fields
 

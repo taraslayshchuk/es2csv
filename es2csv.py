@@ -2,7 +2,7 @@
 """
 title:           A CLI tool for exporting data from Elasticsearch into a CSV file.
 description:     Command line utility, written in Python, for querying Elasticsearch in Lucene query syntax or Query DSL syntax and exporting result as documents into a CSV file.
-usage:           es2csv -q '*' -i _all -o ~/file.csv -k -m 100
+usage:           es2csv -q '*' -i _all -e -o ~/file.csv -k -m 100
                  es2csv -q '{"query": {"match_all": {}}}' -r -i _all -o ~/file.csv
                  es2csv -q '*' -i logstash-2015-01-* -f host status message -o ~/file.csv
                  es2csv -q 'host: localhost' -i logstash-2015-01-01 logstash-2015-01-02 -f host status message -o ~/file.csv
@@ -24,6 +24,7 @@ FLUSH_BUFFER = 1000  # Chunk of docs to flush in temp file
 CONNECTION_TIMEOUT = 120
 TIMES_TO_TRY = 3
 RETRY_DELAY = 60
+META_FIELDS = ['_id', '_index', '_score', '_type']
 __version__ = '1.0.2'
 
 
@@ -64,7 +65,7 @@ class Es2csv:
         self.scroll_size = 100
         self.scroll_time = '30m'
 
-        self.csv_headers = []
+        self.csv_headers = list(META_FIELDS) if self.opts.meta_fields else []
         self.tmp_file = '%s.tmp' % opts.output_file
 
     @retry(elasticsearch.exceptions.ConnectionError, tries=TIMES_TO_TRY)
@@ -91,14 +92,15 @@ class Es2csv:
             index=','.join(self.opts.index_prefixes),
             search_type='scan',
             scroll=self.scroll_time,
-            size=self.scroll_size
+            size=self.scroll_size,
+            terminate_after=self.opts.max_results
         )
         if self.opts.raw_query:
             query = json.loads(self.opts.query)
             search_args['body'] = query
         else:
             query = self.opts.query if not self.opts.tags else '%s AND tags:%s' % (
-                 self.opts.query, '(%s)' % ' AND '.join(self.opts.tags))
+                self.opts.query, '(%s)' % ' AND '.join(self.opts.tags))
             search_args['q'] = query
 
         if '_all' not in self.opts.fields:
@@ -183,7 +185,7 @@ class Es2csv:
 
         with open(self.tmp_file, 'a') as tmp_file:
             for hit in hit_list:
-                out = {}
+                out = {field: hit[field] for field in META_FIELDS} if self.opts.meta_fields else {}
                 if '_source' in hit:
                     to_keyvalue_pairs(hit['_source'])
                     tmp_file.write('%s\n' % json.dumps(out))
@@ -242,6 +244,7 @@ def main():
     p.add_argument('-m', '--max', dest='max_results', default=0, type=int, metavar='INTEGER', help='Maximum number of results to return. Default is %(default)s.')
     p.add_argument('-k', '--kibana_nested', dest='kibana_nested', action='store_true', help='Format nested fields in Kibana style.')
     p.add_argument('-r', '--raw_query', dest='raw_query', action='store_true', help='Switch query format in the Query DSL.')
+    p.add_argument('-e', '--meta_fields', dest='meta_fields', action='store_true', help='Add meta-fields in output.')
     p.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__, help='Show version and exit.')
     p.add_argument('--debug', dest='debug_mode', action='store_true', help='Debug mode on.')
 

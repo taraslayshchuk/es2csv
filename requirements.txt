@@ -1,2 +1,2 @@
-elasticsearch>=1.4.0
+elasticsearch>=2.3.0
 progressbar>=2.3
