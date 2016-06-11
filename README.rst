@@ -62,6 +62,12 @@ Same in Query DSL syntax
 .. code-block:: bash
 
   $ es2csv -r -q '{"query": {"match": {"host": "localhost"}}}' -o database.csv
+
+Very long queries can be read from file
+
+.. code-block:: bash
+
+  $ es2csv -r -q @'~/query string file.json' -o database.csv
   
 With tag
 

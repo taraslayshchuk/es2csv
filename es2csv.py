@@ -4,6 +4,7 @@ title:           A CLI tool for exporting data from Elasticsearch into a CSV fil
 description:     Command line utility, written in Python, for querying Elasticsearch in Lucene query syntax or Query DSL syntax and exporting result as documents into a CSV file.
 usage:           es2csv -q '*' -i _all -e -o ~/file.csv -k -m 100
                  es2csv -q '{"query": {"match_all": {}}}' -r -i _all -o ~/file.csv
+                 es2csv -q @'~/long_query_file.json' -r -i _all -o ~/file.csv
                  es2csv -q '*' -i logstash-2015-01-* -f host status message -o ~/file.csv
                  es2csv -q 'host: localhost' -i logstash-2015-01-01 logstash-2015-01-02 -f host status message -o ~/file.csv
                  es2csv -q 'host: localhost AND status: GET' -u http://kibana.com:80/es/ -o ~/file.csv
@@ -95,6 +96,14 @@ class Es2csv:
             size=self.scroll_size,
             terminate_after=self.opts.max_results
         )
+        if self.opts.query.startswith('@'):
+            query_file = self.opts.query[1:]
+            if os.path.exists(query_file):
+                with open(query_file, 'r') as f:
+                    self.opts.query = f.read()
+            else:
+                print 'No such file: %s' % query_file
+                exit(1)
         if self.opts.raw_query:
             query = json.loads(self.opts.query)
             search_args['body'] = query
