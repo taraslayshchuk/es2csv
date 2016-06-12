@@ -26,7 +26,7 @@ CONNECTION_TIMEOUT = 120
 TIMES_TO_TRY = 3
 RETRY_DELAY = 60
 META_FIELDS = ['_id', '_index', '_score', '_type']
-__version__ = '1.0.2'
+__version__ = '1.0.3'
 
 
 # Retry decorator for functions with exceptions
