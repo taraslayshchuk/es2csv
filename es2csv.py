@@ -89,6 +89,9 @@ class Es2csv:
 
     @retry(elasticsearch.exceptions.ConnectionError, tries=TIMES_TO_TRY)
     def search_query(self):
+        @retry(elasticsearch.exceptions.ConnectionError, tries=TIMES_TO_TRY)
+        def next_scroll(scroll_id):
+            return self.es_conn.scroll(scroll=self.scroll_time, scroll_id=scroll_id)
         search_args = dict(
             index=','.join(self.opts.index_prefixes),
             search_type='scan',
@@ -102,10 +105,14 @@ class Es2csv:
                 with open(query_file, 'r') as f:
                     self.opts.query = f.read()
             else:
-                print 'No such file: %s' % query_file
+                print('No such file: %s' % query_file)
                 exit(1)
         if self.opts.raw_query:
-            query = json.loads(self.opts.query)
+            try:
+                query = json.loads(self.opts.query)
+            except ValueError as e:
+                print('Invalid JSON syntax in query. %s' % e)
+                exit(1)
             search_args['body'] = query
         else:
             query = self.opts.query if not self.opts.tags else '%s AND tags:%s' % (
@@ -147,10 +154,13 @@ class Es2csv:
             bar = progressbar.ProgressBar(widgets=widgets, maxval=self.num_results).start()
 
             while total_lines != self.num_results:
-                res = self.es_conn.scroll(scroll=self.scroll_time, scroll_id=res['_scroll_id'])
+                res = next_scroll(res['_scroll_id'])
                 if res['_scroll_id'] not in self.scroll_ids:
                     self.scroll_ids.append(res['_scroll_id'])
 
+                if not res['hits']['hits']:
+                    print('Scroll[%s] expired(multiple reads?). Saving loaded data.' % res['_scroll_id'])
+                    break
                 for hit in res['hits']['hits']:
                     total_lines += 1
                     bar.update(total_lines)
