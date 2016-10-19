@@ -29,7 +29,7 @@ Usage
 -----
 .. code-block:: bash
 
- $ es2csv [-h] -q QUERY [-u URL] [-i INDEX [INDEX ...]]
+ $ es2csv [-h] -q QUERY [-u URL] [-i INDEX [INDEX ...]] [-D DOC_TYPE [DOC_TYPE ...]] 
           [-t TAGS [TAGS ...]] -o FILE [-f FIELDS [FIELDS ...]]
           [-d DELIMITER] [-m INTEGER] [-k] [-r] [-v] [--debug]
 
@@ -38,6 +38,7 @@ Usage
   -o, --output_file FILE                   CSV file location.                           [required]
   -u, --url URL                            Elasticsearch host URL. Default is http://localhost:9200.
   -i, --index-prefixes INDEX [INDEX ...]   Index name prefix(es). Default is ['logstash-*'].
+  -D, --doc_type doc_type [doc_type ...]   Document type. Default is ['logstash-*'].
   -t, --tags TAGS [TAGS ...]               Query tags.
   -f, --fields FIELDS [FIELDS ...]         List of selected fields in output. Default is ['_all'].
   -d, --delimiter DELIMITER                Delimiter to use in CSV file. Default is ",".

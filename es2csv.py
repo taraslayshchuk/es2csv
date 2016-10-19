@@ -99,6 +99,9 @@ class Es2csv:
             size=self.scroll_size,
             terminate_after=self.opts.max_results
         )
+        if self.opts.doc_type:
+            search_args['doc_type']=self.opts.doc_type
+            
         if self.opts.query.startswith('@'):
             query_file = self.opts.query[1:]
             if os.path.exists(query_file):
@@ -256,6 +259,7 @@ def main():
     p.add_argument('-q', '--query', dest='query', type=str, required=True, help='Query string in Lucene syntax.')
     p.add_argument('-u', '--url', dest='url', default='http://localhost:9200', type=str, help='Elasticsearch host URL. Default is %(default)s.')
     p.add_argument('-i', '--index-prefixes', dest='index_prefixes', default=['logstash-*'], type=str, nargs='+', metavar='INDEX', help='Index name prefix(es). Default is %(default)s.')
+    p.add_argument('-D', '--doc_type', dest='doc_type', default=['logstash-*'], type=str, nargs='+', metavar='DOC_TYPE', help='Document type. Default is %(default)s.')
     p.add_argument('-t', '--tags', dest='tags', type=str, nargs='+', help='Query tags.')
     p.add_argument('-o', '--output_file', dest='output_file', type=str, required=True, metavar='FILE', help='CSV file location.')
     p.add_argument('-f', '--fields', dest='fields', default=['_all'], type=str, nargs='+', help='List of selected fields in output. Default is %(default)s.')
