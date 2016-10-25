@@ -3,6 +3,13 @@
 Release Changelog
 =================
 
+2.4.0 (2016-10-26)
+------------------
+- Added JSON validation for raw query. (Issue `#7 <https://github.com/taraslayshchuk/es2csv/issues/7>`_)
+- Added checks to exclude hangs during connection issues. (Issue `#9 <https://github.com/taraslayshchuk/es2csv/issues/9>`_)
+- Updating version elasticsearch-py to 2.4.0 and freeze this dependence according to mask 2.4.*. (Issue `#14 <https://github.com/taraslayshchuk/es2csv/issues/14>`_)
+- Updating version progressbar2 to fix issue with visibility.
+
 1.0.3 (2016-06-12)
 ------------------
 - Added option to read query string from file --query(-q) @'~/filename.json'. (Issue `#5 <https://github.com/taraslayshchuk/es2csv/issues/5>`_)
