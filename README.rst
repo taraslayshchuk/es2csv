@@ -38,7 +38,7 @@ Usage
   -o, --output_file FILE                   CSV file location.                           [required]
   -u, --url URL                            Elasticsearch host URL. Default is http://localhost:9200.
   -i, --index-prefixes INDEX [INDEX ...]   Index name prefix(es). Default is ['logstash-*'].
-  -D, --doc_type doc_type [doc_type ...]   Document type. Default is ['logstash-*'].
+  -D, --doc_type DOC_TYPE [DOC_TYPE ...]   Document type(s).
   -t, --tags TAGS [TAGS ...]               Query tags.
   -f, --fields FIELDS [FIELDS ...]         List of selected fields in output. Default is ['_all'].
   -d, --delimiter DELIMITER                Delimiter to use in CSV file. Default is ",".
@@ -135,6 +135,12 @@ Collecting all data on all indices
 .. code-block:: bash
 
   $ es2csv -i _all -q '*' -o database.csv
+  
+Specifying document type
+
+.. code-block:: bash
+
+  $ es2csv -i _all -D log -q '*' -o database.csv
   
 Selecting some fields, what you are interesting in, if you don't need all of them (query run faster)
 
