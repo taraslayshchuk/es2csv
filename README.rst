@@ -45,6 +45,7 @@ Usage
   -k, --kibana_nested                      Format nested fields in Kibana style.
   -r, --raw_query                          Switch query format in the Query DSL.
   -e, --meta_fields                        Add meta-fields in output.
+  -a, --auth                               Elasticsearch basic authentication in the form of username:password.
   -v, --version                            Show version and exit.
   --debug                                  Debug mode on.
   -h, --help                               show this help message and exit
@@ -104,6 +105,12 @@ With Authorization
 .. code-block:: bash
 
   $ es2csv -u http://login:password@my.cool.host.com:6666/es/ -q 'host: localhost' -o database.csv
+
+With explicit Authorization
+
+.. code-block:: bash
+
+  $ es2csv -u http://my.cool.host.com:6666/es/ -q 'host: localhost' -o database.csv -a login:password
   
 Specifying index
 
