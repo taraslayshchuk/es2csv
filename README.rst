@@ -37,6 +37,7 @@ Usage
   -q, --query QUERY                        Query string in Lucene syntax.               [required]
   -o, --output_file FILE                   CSV file location.                           [required]
   -u, --url URL                            Elasticsearch host URL. Default is http://localhost:9200.
+  -a, --auth                               Elasticsearch basic authentication in the form of username:password.
   -i, --index-prefixes INDEX [INDEX ...]   Index name prefix(es). Default is ['logstash-*'].
   -t, --tags TAGS [TAGS ...]               Query tags.
   -f, --fields FIELDS [FIELDS ...]         List of selected fields in output. Default is ['_all'].
@@ -45,7 +46,6 @@ Usage
   -k, --kibana_nested                      Format nested fields in Kibana style.
   -r, --raw_query                          Switch query format in the Query DSL.
   -e, --meta_fields                        Add meta-fields in output.
-  -a, --auth                               Elasticsearch basic authentication in the form of username:password.
   -v, --version                            Show version and exit.
   --debug                                  Debug mode on.
   -h, --help                               show this help message and exit
