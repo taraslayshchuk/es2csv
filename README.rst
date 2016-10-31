@@ -29,7 +29,7 @@ Usage
 -----
 .. code-block:: bash
 
- $ es2csv [-h] -q QUERY [-u URL] [-i INDEX [INDEX ...]]
+ $ es2csv [-h] -q QUERY [-u URL] [-a AUTH] [-i INDEX [INDEX ...]]
           [-t TAGS [TAGS ...]] -o FILE [-f FIELDS [FIELDS ...]]
           [-d DELIMITER] [-m INTEGER] [-k] [-r] [-v] [--debug]
 
@@ -37,6 +37,7 @@ Usage
   -q, --query QUERY                        Query string in Lucene syntax.               [required]
   -o, --output_file FILE                   CSV file location.                           [required]
   -u, --url URL                            Elasticsearch host URL. Default is http://localhost:9200.
+  -a, --auth                               Elasticsearch basic authentication in the form of username:password.
   -i, --index-prefixes INDEX [INDEX ...]   Index name prefix(es). Default is ['logstash-*'].
   -t, --tags TAGS [TAGS ...]               Query tags.
   -f, --fields FIELDS [FIELDS ...]         List of selected fields in output. Default is ['_all'].
@@ -104,6 +105,12 @@ With Authorization
 .. code-block:: bash
 
   $ es2csv -u http://login:password@my.cool.host.com:6666/es/ -q 'host: localhost' -o database.csv
+
+With explicit Authorization
+
+.. code-block:: bash
+
+  $ es2csv -a login:password -u http://my.cool.host.com:6666/es/ -q 'host: localhost' -o database.csv 
   
 Specifying index
 

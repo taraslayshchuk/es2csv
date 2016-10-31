@@ -71,7 +71,7 @@ class Es2csv:
 
     @retry(elasticsearch.exceptions.ConnectionError, tries=TIMES_TO_TRY)
     def create_connection(self):
-        es = elasticsearch.Elasticsearch(self.opts.url, timeout=CONNECTION_TIMEOUT)
+        es = elasticsearch.Elasticsearch(self.opts.url, timeout=CONNECTION_TIMEOUT, http_auth=self.opts.auth)
         es.cluster.health()
         self.es_conn = es
 
@@ -255,6 +255,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('-q', '--query', dest='query', type=str, required=True, help='Query string in Lucene syntax.')
     p.add_argument('-u', '--url', dest='url', default='http://localhost:9200', type=str, help='Elasticsearch host URL. Default is %(default)s.')
+    p.add_argument('-a', '--auth', dest='auth', type=str, required=False, help='Elasticsearch basic authentication in the form of username:password.')
     p.add_argument('-i', '--index-prefixes', dest='index_prefixes', default=['logstash-*'], type=str, nargs='+', metavar='INDEX', help='Index name prefix(es). Default is %(default)s.')
     p.add_argument('-t', '--tags', dest='tags', type=str, nargs='+', help='Query tags.')
     p.add_argument('-o', '--output_file', dest='output_file', type=str, required=True, metavar='FILE', help='CSV file location.')
