@@ -29,7 +29,7 @@ Usage
 -----
 .. code-block:: bash
 
- $ es2csv [-h] -q QUERY [-u URL] [-i INDEX [INDEX ...]]
+ $ es2csv [-h] -q QUERY [-u URL] [-a AUTH] [-i INDEX [INDEX ...]]
           [-t TAGS [TAGS ...]] -o FILE [-f FIELDS [FIELDS ...]]
           [-d DELIMITER] [-m INTEGER] [-k] [-r] [-v] [--debug]
 
@@ -110,7 +110,7 @@ With explicit Authorization
 
 .. code-block:: bash
 
-  $ es2csv -u http://my.cool.host.com:6666/es/ -q 'host: localhost' -o database.csv -a login:password
+  $ es2csv -a login:password -u http://my.cool.host.com:6666/es/ -q 'host: localhost' -o database.csv 
   
 Specifying index
 
