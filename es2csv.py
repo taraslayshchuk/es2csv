@@ -26,7 +26,7 @@ CONNECTION_TIMEOUT = 120
 TIMES_TO_TRY = 3
 RETRY_DELAY = 60
 META_FIELDS = ['_id', '_index', '_score', '_type']
-__version__ = '1.0.3'
+__version__ = '2.4.0'
 
 
 # Retry decorator for functions with exceptions
@@ -48,7 +48,7 @@ def retry(ExceptionToCheck, tries=TIMES_TO_TRY, delay=RETRY_DELAY):
             try:
                 return f(*args, **kwargs)
             except ExceptionToCheck as e:
-                print(e)
+                print('Fatal Error: %s' % e)
                 exit(1)
 
         return f_retry
@@ -71,7 +71,7 @@ class Es2csv:
 
     @retry(elasticsearch.exceptions.ConnectionError, tries=TIMES_TO_TRY)
     def create_connection(self):
-        es = elasticsearch.Elasticsearch(self.opts.url, timeout=CONNECTION_TIMEOUT)
+        es = elasticsearch.Elasticsearch(self.opts.url, timeout=CONNECTION_TIMEOUT, http_auth=self.opts.auth)
         es.cluster.health()
         self.es_conn = es
 
@@ -153,7 +153,7 @@ class Es2csv:
                        progressbar.Percentage(),
                        progressbar.FormatLabel('] [%(elapsed)s] ['),
                        progressbar.ETA(), '] [',
-                       progressbar.FileTransferSpeed('docs'), ']'
+                       progressbar.FileTransferSpeed(unit='docs'), ']'
                        ]
             bar = progressbar.ProgressBar(widgets=widgets, maxval=self.num_results).start()
 
@@ -232,7 +232,7 @@ class Es2csv:
                            progressbar.Percentage(),
                            progressbar.FormatLabel('] [%(elapsed)s] ['),
                            progressbar.ETA(), '] [',
-                           progressbar.FileTransferSpeed('lines'), ']'
+                           progressbar.FileTransferSpeed(unit='lines'), ']'
                            ]
                 bar = progressbar.ProgressBar(widgets=widgets, maxval=self.num_results).start()
 
@@ -259,6 +259,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('-q', '--query', dest='query', type=str, required=True, help='Query string in Lucene syntax.')
     p.add_argument('-u', '--url', dest='url', default='http://localhost:9200', type=str, help='Elasticsearch host URL. Default is %(default)s.')
+    p.add_argument('-a', '--auth', dest='auth', type=str, required=False, help='Elasticsearch basic authentication in the form of username:password.')
     p.add_argument('-i', '--index-prefixes', dest='index_prefixes', default=['logstash-*'], type=str, nargs='+', metavar='INDEX', help='Index name prefix(es). Default is %(default)s.')
     p.add_argument('-D', '--doc_types', dest='doc_types', type=str, nargs='+', metavar='DOC_TYPE', help='Document type(s).')
     p.add_argument('-t', '--tags', dest='tags', type=str, nargs='+', help='Query tags.')
