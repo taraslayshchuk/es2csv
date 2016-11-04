@@ -140,7 +140,7 @@ Specifying document type
 
 .. code-block:: bash
 
-  $ es2csv -i _all -D log -q '*' -o database.csv
+  $ es2csv -D log -i _all -q '*' -o database.csv
   
 Selecting some fields, what you are interesting in, if you don't need all of them (query run faster)
 
