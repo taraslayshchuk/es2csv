@@ -30,8 +30,9 @@ Usage
 .. code-block:: bash
 
  $ es2csv [-h] -q QUERY [-u URL] [-a AUTH] [-i INDEX [INDEX ...]]
-          [-t TAGS [TAGS ...]] -o FILE [-f FIELDS [FIELDS ...]]
-          [-d DELIMITER] [-m INTEGER] [-k] [-r] [-v] [--debug]
+          [-D DOC_TYPE [DOC_TYPE ...]] [-t TAGS [TAGS ...]] -o FILE
+          [-f FIELDS [FIELDS ...]] [-d DELIMITER] [-m INTEGER] [-k]
+          [-r] [-e] [-v] [--debug]
 
  Arguments:
   -q, --query QUERY                        Query string in Lucene syntax.               [required]
@@ -39,6 +40,7 @@ Usage
   -u, --url URL                            Elasticsearch host URL. Default is http://localhost:9200.
   -a, --auth                               Elasticsearch basic authentication in the form of username:password.
   -i, --index-prefixes INDEX [INDEX ...]   Index name prefix(es). Default is ['logstash-*'].
+  -D, --doc_types DOC_TYPE [DOC_TYPE ...]  Document type(s).
   -t, --tags TAGS [TAGS ...]               Query tags.
   -f, --fields FIELDS [FIELDS ...]         List of selected fields in output. Default is ['_all'].
   -d, --delimiter DELIMITER                Delimiter to use in CSV file. Default is ",".
@@ -141,6 +143,12 @@ Collecting all data on all indices
 .. code-block:: bash
 
   $ es2csv -i _all -q '*' -o database.csv
+  
+Specifying document type
+
+.. code-block:: bash
+
+  $ es2csv -D log -i _all -q '*' -o database.csv
   
 Selecting some fields, what you are interesting in, if you don't need all of them (query run faster)
 
