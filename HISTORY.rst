@@ -3,6 +3,11 @@
 Release Changelog
 =================
 
+2.4.1 (2016-11-10)
+------------------
+- Added --auth(-a) argument for Elasticsearch basic authentication. (Pull `#17 <https://github.com/taraslayshchuk/es2csv/pull/17>`_)
+- Added --doc_types(-D) argument for specifying document type. (Pull `#13 <https://github.com/taraslayshchuk/es2csv/pull/13>`_)
+
 2.4.0 (2016-10-26)
 ------------------
 - Added JSON validation for raw query. (Issue `#7 <https://github.com/taraslayshchuk/es2csv/issues/7>`_)
