@@ -3,6 +3,11 @@
 Release Changelog
 =================
 
+2.4.2 (2017-02-14)
+------------------
+- Added wildcard support in fields naming.
+- Removed column sorting. (Issue `#21 <https://github.com/taraslayshchuk/es2csv/issues/21>`_)
+
 2.4.1 (2016-11-10)
 ------------------
 - Added --auth(-a) argument for Elasticsearch basic authentication. (Pull `#17 <https://github.com/taraslayshchuk/es2csv/pull/17>`_)
