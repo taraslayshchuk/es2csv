@@ -102,7 +102,7 @@ class Es2csv:
 
         if self.opts.doc_types:
             search_args['doc_type'] = self.opts.doc_types
-            
+
         if self.opts.query.startswith('@'):
             query_file = self.opts.query[1:]
             if os.path.exists(query_file):
@@ -124,7 +124,8 @@ class Es2csv:
             search_args['q'] = query
 
         if '_all' not in self.opts.fields:
-            search_args['fields'] = ','.join(self.opts.fields)
+            search_args['_source_include'] = ','.join(self.opts.fields)
+            self.csv_headers.extend([field for field in self.opts.fields if '*' not in field])
 
         if self.opts.debug_mode:
             print('Using these indices: %s' % ', '.join(self.opts.index_prefixes))
@@ -138,7 +139,7 @@ class Es2csv:
 
         print('Found %s results' % self.num_results)
         if self.opts.debug_mode:
-            print(res)
+            print(json.dumps(res))
 
         if self.num_results > 0:
             open(self.opts.output_file, 'w').close()
@@ -209,11 +210,8 @@ class Es2csv:
         with open(self.tmp_file, 'a') as tmp_file:
             for hit in hit_list:
                 out = {field: hit[field] for field in META_FIELDS} if self.opts.meta_fields else {}
-                if '_source' in hit:
+                if '_source' in hit and len(hit['_source']) > 0:
                     to_keyvalue_pairs(hit['_source'])
-                    tmp_file.write('%s\n' % json.dumps(out))
-                elif 'fields' in hit:
-                    to_keyvalue_pairs(hit['fields'])
                     tmp_file.write('%s\n' % json.dumps(out))
         tmp_file.close()
 
@@ -221,7 +219,6 @@ class Es2csv:
         if self.num_results > 0:
             self.num_results = sum(1 for line in open(self.tmp_file, 'r'))
             if self.num_results > 0:
-                self.csv_headers.sort()
                 output_file = open(self.opts.output_file, 'a')
                 csv_writer = csv.DictWriter(output_file, fieldnames=self.csv_headers, delimiter=self.opts.delimiter)
                 csv_writer.writeheader()
