@@ -156,7 +156,12 @@ Selecting some fields, what you are interesting in, if you don't need all of the
 
   $ es2csv -f host status date -q 'host: localhost' -o database.csv
 
-  
+Or field mask
+
+.. code-block:: bash
+
+  $ es2csv -f 'ho*' 'st*us' '*ate' -q 'host: localhost' -o database.csv
+
 Selecting all fields, by default
 
 .. code-block:: bash

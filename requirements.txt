@@ -1,2 +1,2 @@
-elasticsearch==2.4.*
-progressbar2==3.10.*
+elasticsearch>=2.4.0,<2.5.0
+progressbar2>=3.10.0,<3.11.0
