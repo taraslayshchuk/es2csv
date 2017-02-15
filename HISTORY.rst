@@ -3,6 +3,11 @@
 Release Changelog
 =================
 
+2.4.3 (2017-02-15)
+------------------
+- Update doc according to wildcard support in fields naming.
+- Added support of old version pip. (Issue `#16 <https://github.com/taraslayshchuk/es2csv/issues/16>`_)
+
 2.4.2 (2017-02-14)
 ------------------
 - Added wildcard support in fields naming.
