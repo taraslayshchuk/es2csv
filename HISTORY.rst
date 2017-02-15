@@ -3,6 +3,10 @@
 Release Changelog
 =================
 
+5.2.0 (2017-02-16)
+------------------
+- Updating version elasticsearch-py to 5.2.* and added support of Elasticsearch 5. (Issue `#19 <https://github.com/taraslayshchuk/es2csv/issues/19>`_)
+
 2.4.3 (2017-02-15)
 ------------------
 - Update doc according to wildcard support in fields naming.
