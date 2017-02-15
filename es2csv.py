@@ -94,7 +94,6 @@ class Es2csv:
             return self.es_conn.scroll(scroll=self.scroll_time, scroll_id=scroll_id)
         search_args = dict(
             index=','.join(self.opts.index_prefixes),
-            search_type='scan',
             scroll=self.scroll_time,
             size=self.scroll_size,
             terminate_after=self.opts.max_results
@@ -134,7 +133,6 @@ class Es2csv:
 
         res = self.es_conn.search(**search_args)
 
-        self.scroll_ids.append(res['_scroll_id'])
         self.num_results = res['hits']['total']
 
         print('Found %s results' % self.num_results)
@@ -159,7 +157,6 @@ class Es2csv:
             bar = progressbar.ProgressBar(widgets=widgets, maxval=self.num_results).start()
 
             while total_lines != self.num_results:
-                res = next_scroll(res['_scroll_id'])
                 if res['_scroll_id'] not in self.scroll_ids:
                     self.scroll_ids.append(res['_scroll_id'])
 
@@ -178,6 +175,7 @@ class Es2csv:
                             self.flush_to_file(hit_list)
                             print('Hit max result limit: %s records' % self.opts.max_results)
                             return
+                res = next_scroll(res['_scroll_id'])
             self.flush_to_file(hit_list)
             bar.finish()
 
