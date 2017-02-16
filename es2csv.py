@@ -271,7 +271,7 @@ def main():
     p.add_argument('--ca-certs', dest='ca_certs', default='', type=str, help='Location of CA cert file for Cert verification')
     p.add_argument('--client-cert', dest='client_cert', default='', type=str, help='Location of Client Auth cert')
     p.add_argument('--client-key', dest='client_key', default='', type=str, help='Location of Client Cert Key')
-    p.add_argument('--use-ssl', dest='use_ssl'. action='store_true', help='Use SSL in the Elasticsearch connection')
+    p.add_argument('--use-ssl', dest='use_ssl', action='store_true', help='Use SSL in the Elasticsearch connection')
 
     if len(sys.argv) == 1:
         p.print_help()
