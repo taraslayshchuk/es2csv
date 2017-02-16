@@ -267,7 +267,7 @@ def main():
     p.add_argument('-e', '--meta_fields', dest='meta_fields', action='store_true', help='Add meta-fields in output.')
     p.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__, help='Show version and exit.')
     p.add_argument('--debug', dest='debug_mode', action='store_true', help='Debug mode on.')
-    p.add_argument('--verify-certs',dest='verify_certs', action='store_true', help='Verify SSL Certs (default is False)'
+    p.add_argument('--verify-certs', dest='verify_certs', action='store_true', help='Verify SSL Certs (default is False)')
     p.add_argument('--ca-certs', dest='ca_certs', default='', type=str, help='Location of CA cert file for Cert verification')
     p.add_argument('--client-cert', dest='client_cert', default='', type=str, help='Location of Client Auth cert')
     p.add_argument('--client-key', dest='client_key', default='', type=str, help='Location of Client Cert Key')
