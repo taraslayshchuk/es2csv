@@ -32,7 +32,9 @@ Usage
  $ es2csv [-h] -q QUERY [-u URL] [-a AUTH] [-i INDEX [INDEX ...]]
           [-D DOC_TYPE [DOC_TYPE ...]] [-t TAGS [TAGS ...]] -o FILE
           [-f FIELDS [FIELDS ...]] [-d DELIMITER] [-m INTEGER] [-k]
-          [-r] [-e] [-v] [--debug]
+          [-r] [-e] [--verify-certs] [--ca-certs CA_CERTS]
+          [--client-cert CLIENT_CERT] [--client-key CLIENT_KEY] [-v]
+          [--debug]
 
  Arguments:
   -q, --query QUERY                        Query string in Lucene syntax.               [required]
@@ -48,6 +50,10 @@ Usage
   -k, --kibana_nested                      Format nested fields in Kibana style.
   -r, --raw_query                          Switch query format in the Query DSL.
   -e, --meta_fields                        Add meta-fields in output.
+  --verify-certs                           Verify SSL certificates. Default is False.
+  --ca-certs CA_CERTS                      Location of CA bundle.
+  --client-cert CLIENT_CERT                Location of Client Auth cert.
+  --client-key CLIENT_KEY                  Location of Client Cert Key.
   -v, --version                            Show version and exit.
   --debug                                  Debug mode on.
   -h, --help                               show this help message and exit
