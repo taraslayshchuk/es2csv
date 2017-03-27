@@ -32,7 +32,9 @@ Usage
  $ es2csv [-h] -q QUERY [-u URL] [-a AUTH] [-i INDEX [INDEX ...]]
           [-D DOC_TYPE [DOC_TYPE ...]] [-t TAGS [TAGS ...]] -o FILE
           [-f FIELDS [FIELDS ...]] [-d DELIMITER] [-m INTEGER] [-k]
-          [-r] [-e] [-v] [--debug]
+          [-r] [-e] [--verify-certs] [--ca-certs CA_CERTS]
+          [--client-cert CLIENT_CERT] [--client-key CLIENT_KEY] [-v]
+          [--debug]
 
  Arguments:
   -q, --query QUERY                        Query string in Lucene syntax.               [required]
@@ -48,6 +50,10 @@ Usage
   -k, --kibana_nested                      Format nested fields in Kibana style.
   -r, --raw_query                          Switch query format in the Query DSL.
   -e, --meta_fields                        Add meta-fields in output.
+  --verify-certs                           Verify SSL certificates. Default is False.
+  --ca-certs CA_CERTS                      Location of CA bundle.
+  --client-cert CLIENT_CERT                Location of Client Auth cert.
+  --client-key CLIENT_KEY                  Location of Client Cert Key.
   -v, --version                            Show version and exit.
   --debug                                  Debug mode on.
   -h, --help                               show this help message and exit
@@ -71,37 +77,49 @@ Very long queries can be read from file
 .. code-block:: bash
 
   $ es2csv -r -q @'~/query string file.json' -o database.csv
-  
+
 With tag
 
 .. code-block:: bash
 
   $ es2csv -t dev -q 'host: localhost' -o database.csv
-  
+
 More tags
 
 .. code-block:: bash
 
   $ es2csv -t dev prod -q 'host: localhost' -o database.csv
-  
+
 On custom Elasticsearch host
 
 .. code-block:: bash
 
   $ es2csv -u my.cool.host.com:9200 -q 'host: localhost' -o database.csv
-  
+
 You are using secure Elasticsearch with nginx? No problem!
 
 .. code-block:: bash
 
   $ es2csv -u http://my.cool.host.com/es/ -q 'host: localhost' -o database.csv
-  
+
+With enabled SSL certificate verification (off by default)
+
+.. code-block:: bash
+
+  $ es2csv --verify-certs -u https://my.cool.host.com/es/ -q 'host: localhost' -o database.csv
+
+With your own certificate authority bundle
+
+.. code-block:: bash
+
+  $ es2csv --ca-certs '/path/to/your/ca_bundle' --verify-certs -u https://host.com -q '*' -o out.csv
+
 Not default port?
 
 .. code-block:: bash
 
   $ es2csv -u my.cool.host.com:6666/es/ -q 'host: localhost' -o database.csv
-  
+
 With Authorization
 
 .. code-block:: bash
@@ -113,43 +131,43 @@ With explicit Authorization
 .. code-block:: bash
 
   $ es2csv -a login:password -u http://my.cool.host.com:6666/es/ -q 'host: localhost' -o database.csv 
-  
+
 Specifying index
 
 .. code-block:: bash
 
   $ es2csv -i logstash-2015-07-07 -q 'host: localhost' -o database.csv
-  
+
 More indexes
 
 .. code-block:: bash
 
   $ es2csv -i logstash-2015-07-07 logstash-2015-08-08 -q 'host: localhost' -o database.csv
-  
+
 Or index mask
 
 .. code-block:: bash
 
   $ es2csv -i logstash-2015-* -q 'host: localhost' -o database.csv
-  
+
 And now together
 
 .. code-block:: bash
 
   $ es2csv -i logstash-2015-01-0* logstash-2015-01-10 -q 'host: localhost' -o database.csv
-  
+
 Collecting all data on all indices
 
 .. code-block:: bash
 
   $ es2csv -i _all -q '*' -o database.csv
-  
+
 Specifying document type
 
 .. code-block:: bash
 
   $ es2csv -D log -i _all -q '*' -o database.csv
-  
+
 Selecting some fields, what you are interesting in, if you don't need all of them (query run faster)
 
 .. code-block:: bash
@@ -191,7 +209,7 @@ Changing column delimiter in CSV file, by default ','
 .. code-block:: bash
 
   $ es2csv -d ';' -q '*' -i twitter -o database.csv
-  
+
 Changing nested columns output format to Kibana style like
 
 .. code-block:: bash
