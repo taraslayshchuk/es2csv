@@ -71,7 +71,7 @@ class Es2csv:
 
     @retry(elasticsearch.exceptions.ConnectionError, tries=TIMES_TO_TRY)
     def create_connection(self):
-        es = elasticsearch.Elasticsearch(self.opts.url, timeout=CONNECTION_TIMEOUT, http_auth=self.opts.auth)
+        es = elasticsearch.Elasticsearch(self.opts.url, timeout=CONNECTION_TIMEOUT, http_auth=self.opts.auth, verify_certs=self.opts.verify_certs, ca_certs=self.opts.ca_certs, client_cert=self.opts.client_cert, client_key=self.opts.client_key)
         es.cluster.health()
         self.es_conn = es
 
@@ -267,6 +267,10 @@ def main():
     p.add_argument('-k', '--kibana_nested', dest='kibana_nested', action='store_true', help='Format nested fields in Kibana style.')
     p.add_argument('-r', '--raw_query', dest='raw_query', action='store_true', help='Switch query format in the Query DSL.')
     p.add_argument('-e', '--meta_fields', dest='meta_fields', action='store_true', help='Add meta-fields in output.')
+    p.add_argument('--verify-certs', dest='verify_certs', action='store_true', help='Verify SSL certificates. Default is %(default)s.')
+    p.add_argument('--ca-certs', dest='ca_certs', default=None, type=str, help='Location of CA bundle.')
+    p.add_argument('--client-cert', dest='client_cert', default=None, type=str, help='Location of Client Auth cert.')
+    p.add_argument('--client-key', dest='client_key', default=None, type=str, help='Location of Client Cert Key.')
     p.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__, help='Show version and exit.')
     p.add_argument('--debug', dest='debug_mode', action='store_true', help='Debug mode on.')
 
