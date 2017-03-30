@@ -50,6 +50,7 @@ Usage
   -k, --kibana_nested                      Format nested fields in Kibana style.
   -r, --raw_query                          Switch query format in the Query DSL.
   -e, --meta_fields                        Add meta-fields in output.
+  -s, --scroll_size                        Scroll size for each query. Default is 100.
   --verify-certs                           Verify SSL certificates. Default is False.
   --ca-certs CA_CERTS                      Location of CA bundle.
   --client-cert CLIENT_CERT                Location of Client Auth cert.
@@ -203,6 +204,12 @@ Max results count
 .. code-block:: bash
 
   $ es2csv -m 6283185 -q '*' -i twitter -o database.csv
+
+Retrieve 2000 results in just 2 requests (two scrolls 1000 each):
+
+.. code-block:: bash
+
+  $ es2csv -m 2000 -s 1000 -q '*' -i twitter -o database.csv
 
 Changing column delimiter in CSV file, by default ','
 

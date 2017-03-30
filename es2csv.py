@@ -63,7 +63,7 @@ class Es2csv:
 
         self.num_results = 0
         self.scroll_ids = []
-        self.scroll_size = 100
+        self.scroll_size = self.opts.scroll_size 
         self.scroll_time = '30m'
 
         self.csv_headers = list(META_FIELDS) if self.opts.meta_fields else []
@@ -265,6 +265,7 @@ def main():
     p.add_argument('-k', '--kibana_nested', dest='kibana_nested', action='store_true', help='Format nested fields in Kibana style.')
     p.add_argument('-r', '--raw_query', dest='raw_query', action='store_true', help='Switch query format in the Query DSL.')
     p.add_argument('-e', '--meta_fields', dest='meta_fields', action='store_true', help='Add meta-fields in output.')
+    p.add_argument('-s', '--scroll_size', dest='scroll_size', default=100, type=int, metavar='INTEGER', help='Scroll size for each query. Default is %(default)s.')
     p.add_argument('--verify-certs', dest='verify_certs', action='store_true', help='Verify SSL certificates. Default is %(default)s.')
     p.add_argument('--ca-certs', dest='ca_certs', default=None, type=str, help='Location of CA bundle.')
     p.add_argument('--client-cert', dest='client_cert', default=None, type=str, help='Location of Client Auth cert.')
