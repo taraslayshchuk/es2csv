@@ -3,6 +3,11 @@
 Release Changelog
 =================
 
+5.2.1 (2017-04-02)
+------------------
+- Added --verify-certs, --ca-certs, --client-cert, --client-key arguments for SSL configuration. (Issue `#11 <https://github.com/taraslayshchuk/es2csv/issues/11>`_ and `#24 <https://github.com/taraslayshchuk/es2csv/issues/24>`_, Pull `#22 <https://github.com/taraslayshchuk/es2csv/pull/22>`_)
+- Added --scroll_size(-s) argument to specify the scroll size of requests. (Pull `#27 <https://github.com/taraslayshchuk/es2csv/pull/27>`_)
+
 5.2.0 (2017-02-16)
 ------------------
 - Updating version elasticsearch-py to 5.2.* and added support of Elasticsearch 5. (Issue `#19 <https://github.com/taraslayshchuk/es2csv/issues/19>`_)
