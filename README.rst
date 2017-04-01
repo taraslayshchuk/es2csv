@@ -31,10 +31,10 @@ Usage
 
  $ es2csv [-h] -q QUERY [-u URL] [-a AUTH] [-i INDEX [INDEX ...]]
           [-D DOC_TYPE [DOC_TYPE ...]] [-t TAGS [TAGS ...]] -o FILE
-          [-f FIELDS [FIELDS ...]] [-d DELIMITER] [-m INTEGER] [-k]
-          [-r] [-e] [--verify-certs] [--ca-certs CA_CERTS]
-          [--client-cert CLIENT_CERT] [--client-key CLIENT_KEY] [-v]
-          [--debug]
+          [-f FIELDS [FIELDS ...]] [-d DELIMITER] [-m INTEGER]
+          [-s INTEGER] [-k] [-r] [-e] [--verify-certs]
+          [--ca-certs CA_CERTS] [--client-cert CLIENT_CERT]
+          [--client-key CLIENT_KEY] [-v] [--debug]
 
  Arguments:
   -q, --query QUERY                        Query string in Lucene syntax.               [required]
@@ -47,6 +47,7 @@ Usage
   -f, --fields FIELDS [FIELDS ...]         List of selected fields in output. Default is ['_all'].
   -d, --delimiter DELIMITER                Delimiter to use in CSV file. Default is ",".
   -m, --max INTEGER                        Maximum number of results to return. Default is 0.
+  -s, --scroll_size INTEGER                Scroll size for each batch of results. Default is 100.
   -k, --kibana_nested                      Format nested fields in Kibana style.
   -r, --raw_query                          Switch query format in the Query DSL.
   -e, --meta_fields                        Add meta-fields in output.
@@ -203,6 +204,12 @@ Max results count
 .. code-block:: bash
 
   $ es2csv -m 6283185 -q '*' -i twitter -o database.csv
+
+Retrieve 2000 results in just 2 requests (two scrolls 1000 each):
+
+.. code-block:: bash
+
+  $ es2csv -m 2000 -s 1000 -q '*' -i twitter -o database.csv
 
 Changing column delimiter in CSV file, by default ','
 

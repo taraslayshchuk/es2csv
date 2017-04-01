@@ -63,7 +63,6 @@ class Es2csv:
 
         self.num_results = 0
         self.scroll_ids = []
-        self.scroll_size = 100
         self.scroll_time = '30m'
 
         self.csv_headers = list(META_FIELDS) if self.opts.meta_fields else []
@@ -96,7 +95,7 @@ class Es2csv:
             index=','.join(self.opts.index_prefixes),
             search_type='scan',
             scroll=self.scroll_time,
-            size=self.scroll_size,
+            size=self.opts.scroll_size,
             terminate_after=self.opts.max_results
         )
 
@@ -264,6 +263,7 @@ def main():
     p.add_argument('-f', '--fields', dest='fields', default=['_all'], type=str, nargs='+', help='List of selected fields in output. Default is %(default)s.')
     p.add_argument('-d', '--delimiter', dest='delimiter', default=',', type=str, help='Delimiter to use in CSV file. Default is "%(default)s".')
     p.add_argument('-m', '--max', dest='max_results', default=0, type=int, metavar='INTEGER', help='Maximum number of results to return. Default is %(default)s.')
+    p.add_argument('-s', '--scroll_size', dest='scroll_size', default=100, type=int, metavar='INTEGER', help='Scroll size for each batch of results. Default is %(default)s.')
     p.add_argument('-k', '--kibana_nested', dest='kibana_nested', action='store_true', help='Format nested fields in Kibana style.')
     p.add_argument('-r', '--raw_query', dest='raw_query', action='store_true', help='Switch query format in the Query DSL.')
     p.add_argument('-e', '--meta_fields', dest='meta_fields', action='store_true', help='Add meta-fields in output.')
