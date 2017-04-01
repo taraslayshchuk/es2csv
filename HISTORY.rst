@@ -3,6 +3,11 @@
 Release Changelog
 =================
 
+2.4.4 (2017-04-02)
+------------------
+- Added --verify-certs, --ca-certs, --client-cert, --client-key arguments for SSL configuration. (Issue `#11 <https://github.com/taraslayshchuk/es2csv/issues/11>`_ and `#24 <https://github.com/taraslayshchuk/es2csv/issues/24>`_, Pull `#22 <https://github.com/taraslayshchuk/es2csv/pull/22>`_)
+- Added --scroll_size(-s) argument to specify the scroll size of requests. (Pull `#27 <https://github.com/taraslayshchuk/es2csv/pull/27>`_)
+
 2.4.3 (2017-02-15)
 ------------------
 - Update doc according to wildcard support in fields naming.
