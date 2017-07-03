@@ -207,7 +207,7 @@ class Es2csv:
         with open(self.tmp_file, 'a') as tmp_file:
             for hit in hit_list:
                 out = {field: hit[field] for field in META_FIELDS} if self.opts.meta_fields else {}
-                if '_source' in hit and len(hit['_source']) > 0:
+                if ('_source' in hit and len(hit['_source']) > 0) or ('fields' in hit and len(hit['fields']) > 0):
                     to_keyvalue_pairs(hit['_source'])
                     to_keyvalue_pairs(hit['fields'])
                     tmp_file.write('%s\n' % json.dumps(out))
