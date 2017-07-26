@@ -234,7 +234,7 @@ class Es2csv:
                     timer += 1
                     bar.update(timer)
                     line_as_dict = json.loads(line)
-                    line_dict_utf8 = {k: v.encode('utf8') if isinstance(v, unicode) else v for k, v in line_as_dict.items()}
+                    line_dict_utf8 = {k: v.encode('utf8') if isinstance(v, str) else v for k, v in line_as_dict.items()}
                     csv_writer.writerow(line_dict_utf8)
                 output_file.close()
                 bar.finish()
