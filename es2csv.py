@@ -216,7 +216,7 @@ class Es2csv:
         if self.num_results > 0:
             self.num_results = sum(1 for line in open(self.tmp_file, 'r'))
             if self.num_results > 0:
-                output_file = open(self.opts.output_file, 'a')
+                output_file = open(self.opts.output_file, 'a', encoding='utf-8')
                 csv_writer = csv.DictWriter(output_file, fieldnames=self.csv_headers, delimiter=self.opts.delimiter)
                 csv_writer.writeheader()
                 timer = 0
@@ -234,7 +234,7 @@ class Es2csv:
                     timer += 1
                     bar.update(timer)
                     line_as_dict = json.loads(line)
-                    line_dict_utf8 = {k: v.encode('utf8') if isinstance(v, unicode) else v for k, v in line_as_dict.items()}
+                    line_dict_utf8 = {k: v if isinstance(v, str) else v for k, v in line_as_dict.items()}
                     csv_writer.writerow(line_dict_utf8)
                 output_file.close()
                 bar.finish()
