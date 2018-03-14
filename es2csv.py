@@ -21,6 +21,22 @@ import elasticsearch
 import progressbar
 from functools import wraps
 
+def normalize_fields(fields):
+    '''Normalize different possible ways to specify the document fields
+
+    Both space and comma are invalid characters to use in field names so we can split on those safely.
+
+    >>> normalize_fields([])
+    []
+    >>> normalize_fields(['a,b,c', 'd', 'e f g'])
+    ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+    >>> normalize_fields(['a,b,c'])
+    ['a', 'b', 'c']
+    >>> normalize_fields(['a','b','c'])
+    ['a', 'b', 'c']
+    '''
+    return [f for e in fields for f in e.replace(' ', ',').split(',')]
+
 FLUSH_BUFFER = 1000  # Chunk of docs to flush in temp file
 CONNECTION_TIMEOUT = 120
 TIMES_TO_TRY = 3
@@ -121,6 +137,7 @@ class Es2csv:
                 self.opts.query, '(%s)' % ' AND '.join(self.opts.tags))
             search_args['q'] = query
 
+        self.opts.fields = normalize_fields(self.opts.fields)
         if '_all' not in self.opts.fields:
             search_args['_source_include'] = ','.join(self.opts.fields)
             self.csv_headers.extend([field for field in self.opts.fields if '*' not in field])
