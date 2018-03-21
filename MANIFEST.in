@@ -1,0 +1,3 @@
+include docs/HISTORY.rst
+include docs/EXAMPLES.rst
+include requirements.txt

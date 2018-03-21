@@ -4,14 +4,13 @@ import re
 
 from setuptools import setup
 
-
 classifiers = [
     'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Developers',
     'Intended Audience :: System Administrators',
     'Environment :: Console',
     'License :: OSI Approved :: Apache Software License',
-    'Programming Language :: Python',
+    'Programming Language :: Python :: 2 :: Only',
     'Programming Language :: Python :: 2.7',
     'Topic :: System :: Systems Administration',
     'Topic :: Database',
@@ -20,22 +19,15 @@ classifiers = [
     'Topic :: Utilities',
 ]
 
-with open('README.rst') as file_readme:
-    readme = file_readme.read()
-
-with open('HISTORY.rst') as history_file:
-    history = history_file.read()
-
-with open('requirements.txt') as file_requirements:
-    requirements = file_requirements.read().splitlines()
-
 
 def read_file(*paths):
     here = os.path.dirname(os.path.abspath(__file__))
     with open(os.path.join(here, *paths)) as f:
         return f.read()
 
-src_file = read_file('es2csv.py')
+
+src_file = read_file('es2csv_cli.py')
+url = 'https://github.com/taraslayshchuk/es2csv'
 
 
 def get_version():
@@ -59,22 +51,35 @@ def get_description():
         raise RuntimeError("Unable to find description string.")
 
 
+version = get_version()
+
+with open('README.rst') as file_readme:
+    readme = file_readme.read()
+    readme = re.sub(r'.(/docs/[A-Z]+.rst)', r'%s/blob/%s\1' % (url, version), readme)
+
+with open('docs/HISTORY.rst') as history_file:
+    history = history_file.read()
+
+with open('requirements.txt') as file_requirements:
+    requirements = file_requirements.read().splitlines()
+
 settings = dict()
 settings.update(
     name='es2csv',
-    version=get_version(),
+    version=version,
     description=get_description(),
     long_description='%s\n\n%s' % (readme, history),
     author='Taras Layshchuk',
-    author_email='taraslayshchuk[@]gmail[dot]com',
+    author_email='taraslayshchuk@gmail.com',
     license='Apache 2.0',
-    url='https://github.com/taraslayshchuk/es2csv',
+    url=url,
     classifiers=classifiers,
+    python_requires='==2.7.*',
     keywords='elasticsearch export kibana es bulk csv',
-    py_modules=['es2csv'],
+    py_modules=['es2csv', 'es2csv_cli'],
     entry_points={
         'console_scripts': [
-            'es2csv = es2csv:main'
+            'es2csv = es2csv_cli:main'
         ]
     },
     install_requires=requirements,
