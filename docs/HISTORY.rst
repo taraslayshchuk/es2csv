@@ -3,6 +3,14 @@
 Release Changelog
 =================
 
+5.5.2 (2018-03-21)
+------------------
+- Fixed encoding in field name to UTF-8. (Issue `#35 <https://github.com/taraslayshchuk/es2csv/issues/35>`_)
+- Added --sort(-S) argument for sorting data by selected field. (Issue `#41 <https://github.com/taraslayshchuk/es2csv/issues/41>`_)
+- Added requirement for version of python 2.7.*. (Issue `#8 <https://github.com/taraslayshchuk/es2csv/issues/8>`_, `#12 <https://github.com/taraslayshchuk/es2csv/issues/12>`_, `#20 <https://github.com/taraslayshchuk/es2csv/issues/20>`_, `#29 <https://github.com/taraslayshchuk/es2csv/issues/29>`_, `#33 <https://github.com/taraslayshchuk/es2csv/issues/33>`_ and `#38 <https://github.com/taraslayshchuk/es2csv/issues/38>`_)
+- Update documentation with examples.
+- Updating version elasticsearch-py to 5.5.*.
+
 5.2.1 (2017-04-02)
 ------------------
 - Added --verify-certs, --ca-certs, --client-cert, --client-key arguments for SSL configuration. (Issue `#11 <https://github.com/taraslayshchuk/es2csv/issues/11>`_ and `#24 <https://github.com/taraslayshchuk/es2csv/issues/24>`_, Pull `#22 <https://github.com/taraslayshchuk/es2csv/pull/22>`_)
