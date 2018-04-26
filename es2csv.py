@@ -6,6 +6,7 @@ import elasticsearch
 import progressbar
 from backports import csv
 from functools import wraps
+from decimal import Decimal
 
 
 FLUSH_BUFFER = 1000  # Chunk of docs to flush in temp file
@@ -225,7 +226,7 @@ class Es2csv:
                 for line in codecs.open(self.tmp_file, mode='r', encoding='utf-8'):
                     timer += 1
                     bar.update(timer)
-                    csv_writer.writerow(json.loads(line))
+                    csv_writer.writerow(json.loads(line, parse_float=Decimal))
                 output_file.close()
                 bar.finish()
             else:
