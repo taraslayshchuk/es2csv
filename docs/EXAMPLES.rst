@@ -275,7 +275,7 @@ Very long queries can be read from file
 
 meta-fields
 -----------
-Selecting meta-fields: _id, _index, _score, _type
+Selecting meta-fields: _id, _index, _score, _type, _explanation. If the selected meta-field is not available than we use `NaN` as a default.
 
 .. code-block:: bash
 
