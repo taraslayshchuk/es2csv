@@ -12,7 +12,8 @@ FLUSH_BUFFER = 1000  # Chunk of docs to flush in temp file
 CONNECTION_TIMEOUT = 120
 TIMES_TO_TRY = 3
 RETRY_DELAY = 60
-META_FIELDS = [u'_id', u'_index', u'_score', u'_type']
+META_FIELDS = [u'_id', u'_index', u'_score', u'_type', u'_explanation']
+NaN = "NaN"
 
 
 # Retry decorator for functions with exceptions
@@ -198,7 +199,7 @@ class Es2csv:
 
         with codecs.open(self.tmp_file, mode='a', encoding='utf-8') as tmp_file:
             for hit in hit_list:
-                out = {field: hit[field] for field in META_FIELDS} if self.opts.meta_fields else {}
+                out = {field: hit.get(field, NaN) for field in META_FIELDS} if self.opts.meta_fields else {}
                 if '_source' in hit and len(hit['_source']) > 0:
                     to_keyvalue_pairs(hit['_source'])
                     tmp_file.write('{}\n'.format(json.dumps(out)))
