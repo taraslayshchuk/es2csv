@@ -13,7 +13,7 @@ Arguments
 `-D, --doc-types <#doc-types>`_ DOC_TYPE [DOC_TYPE ...]       Document type(s).
 `-t, --tags <#tags>`_ TAGS [TAGS ...]                         Query tags.
 `-f, --fields <#fields>`_ FIELDS [FIELDS ...]                 List of selected fields in output. Default is ['_all'].
-`-s, --sort <#sort>`_ FIELDS [FIELDS ...]                     List of <field>:<direction> pairs to sort on. Default is [].
+`-S, --sort <#sort>`_ FIELDS [FIELDS ...]                     List of <field>:<direction> pairs to sort on. Default is [].
 `-d, --delimiter <#delimiter>`_ DELIMITER                     Delimiter to use in CSV file. Default is ",".
 `-m, --max <#max>`_ INTEGER                                   Maximum number of results to return. Default is 0.
 -s, --scroll-size INTEGER                                     Scroll size for each batch of results. Default is 100.
