@@ -209,7 +209,7 @@ class Es2csv:
             self.num_results = sum(1 for line in codecs.open(self.tmp_file, mode='r', encoding='utf-8'))
             if self.num_results > 0:
                 output_file = codecs.open(self.opts.output_file, mode='a', encoding='utf-8')
-                csv_writer = csv.DictWriter(output_file, fieldnames=self.csv_headers)
+                csv_writer = csv.DictWriter(output_file, fieldnames=self.csv_headers, delimiter=unicode(self.opts.delimiter))
                 csv_writer.writeheader()
                 timer = 0
                 widgets = ['Write to csv ',
