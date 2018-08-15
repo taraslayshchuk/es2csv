@@ -7,6 +7,13 @@ import progressbar
 from backports import csv
 from functools import wraps
 
+# Allow users of old Python 2.7 versions to verify certificates with SNI
+try:
+  import urllib3.contrib.pyopenssl
+except ImportError:
+  pass
+else:
+  urllib3.contrib.pyopenssl.inject_into_urllib3()
 
 FLUSH_BUFFER = 1000  # Chunk of docs to flush in temp file
 CONNECTION_TIMEOUT = 120
