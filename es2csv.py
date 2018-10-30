@@ -208,8 +208,13 @@ class Es2csv:
         if self.num_results > 0:
             self.num_results = sum(1 for line in codecs.open(self.tmp_file, mode='r', encoding='utf-8'))
             if self.num_results > 0:
+                output_file = codecs.open(self.opts.output_file, mode='a')
+                output_file.write(codecs.BOM_UTF8)
+                output_file.close()
+                
                 output_file = codecs.open(self.opts.output_file, mode='a', encoding='utf-8')
-                csv_writer = csv.DictWriter(output_file, fieldnames=self.csv_headers)
+                delimiter = self.opts.delimiter.decode('utf-8') if self.opts.delimiter else ','
+                csv_writer = csv.DictWriter(output_file, fieldnames=self.csv_headers, delimiter=delimiter)
                 csv_writer.writeheader()
                 timer = 0
                 widgets = ['Write to csv ',
