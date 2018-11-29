@@ -38,8 +38,8 @@ Usage
  $ es2csv [-h] -q QUERY [-u URL] [-a AUTH] [-i INDEX [INDEX ...]]
           [-D DOC_TYPE [DOC_TYPE ...]] [-t TAGS [TAGS ...]] -o FILE
           [-f FIELDS [FIELDS ...]] [-S FIELDS [FIELDS ...]] [-d DELIMITER]
-          [-m INTEGER] [-s INTEGER] [-k] [-r] [-e] [--verify-certs]
-          [--ca-certs CA_CERTS] [--client-cert CLIENT_CERT]
+          [-m INTEGER] [-s INTEGER] [-k] [-kd KIBANA_DELIMITER] [-r] [-e]
+          [--verify-certs] [--ca-certs CA_CERTS] [--client-cert CLIENT_CERT]
           [--client-key CLIENT_KEY] [-v] [--debug]
 
  Arguments:
@@ -56,6 +56,7 @@ Usage
   -m, --max INTEGER                        Maximum number of results to return. Default is 0.
   -s, --scroll-size INTEGER                Scroll size for each batch of results. Default is 100.
   -k, --kibana-nested                      Format nested fields in Kibana style.
+  -kd, --kibana-delimiter                  Optional delimiter for Kibana style.
   -r, --raw-query                          Switch query format in the Query DSL.
   -e, --meta-fields                        Add meta-fields in output.
   --verify-certs                           Verify SSL certificates. Default is False.

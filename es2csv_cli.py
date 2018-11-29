@@ -33,6 +33,7 @@ def main():
     p.add_argument('-m', '--max', dest='max_results', default=0, type=int, metavar='INTEGER', help='Maximum number of results to return. Default is %(default)s.')
     p.add_argument('-s', '--scroll-size', dest='scroll_size', default=100, type=int, metavar='INTEGER', help='Scroll size for each batch of results. Default is %(default)s.')
     p.add_argument('-k', '--kibana-nested', dest='kibana_nested', action='store_true', help='Format nested fields in Kibana style.')
+    p.add_argument('-kd', '--kibana-delimiter', dest='kibana_delimiter', type=str, required=False, default=',', help='Delimiter for Kibana Style')
     p.add_argument('-r', '--raw-query', dest='raw_query', action='store_true', help='Switch query format in the Query DSL.')
     p.add_argument('-e', '--meta-fields', dest='meta_fields', action='store_true', help='Add meta-fields in output.')
     p.add_argument('--verify-certs', dest='verify_certs', action='store_true', help='Verify SSL certificates. Default is %(default)s.')

@@ -192,7 +192,7 @@ class Es2csv:
                 if header not in self.csv_headers:
                     self.csv_headers.append(header)
                 try:
-                    out[header] = '{}{}{}'.format(out[header], self.opts.delimiter, source)
+                    out[header] = '{}{}{}'.format(out[header], self.opts.kibana_delimiter, source)
                 except:
                     out[header] = source
 
