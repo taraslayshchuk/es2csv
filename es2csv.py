@@ -172,7 +172,7 @@ class Es2csv:
             bar.finish()
 
     def flush_to_file(self, hit_list):
-        delim = self.header_delimeter
+        delim = self.header_delimiter
         def to_keyvalue_pairs(source, ancestors=[], header_delimeter='.'):
             def is_list(arg):
                 return type(arg) is list
