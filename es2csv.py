@@ -172,8 +172,8 @@ class Es2csv:
             bar.finish()
 
     def flush_to_file(self, hit_list):
-        delim = self.header_delimiter
-        def to_keyvalue_pairs(source, ancestors=[], header_delimeter):
+        header_delimiter = self.header_delimiter
+        def to_keyvalue_pairs(source, ancestors=[]):
             def is_list(arg):
                 return type(arg) is list
 
@@ -190,7 +190,7 @@ class Es2csv:
                 else:
                     [to_keyvalue_pairs(item, ancestors + [str(index)]) for index, item in enumerate(source)]
             else:
-                header = header_delimeter.join(ancestors)
+                header = header_delimiter.join(ancestors)
                 if header not in self.csv_headers:
                     self.csv_headers.append(header)
                 try:
@@ -202,7 +202,7 @@ class Es2csv:
             for hit in hit_list:
                 out = {field: hit[field] for field in META_FIELDS} if self.opts.meta_fields else {}
                 if '_source' in hit and len(hit['_source']) > 0:
-                    to_keyvalue_pairs(hit['_source'], header_delimeter=delim)
+                    to_keyvalue_pairs(hit['_source'])
                     tmp_file.write('{}\n'.format(json.dumps(out)))
         tmp_file.close()
 
