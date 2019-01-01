@@ -232,6 +232,10 @@ class Es2csv:
                 print('There is no docs with selected field(s): {}.'.format(','.join(self.opts.fields)))
             os.remove(self.tmp_file)
 
+    def write_to_json(self):
+        if self.num_results > 0:
+            os.rename(self.tmp_file, self.opts.output_file)
+
     def clean_scroll_ids(self):
         try:
             self.es_conn.clear_scroll(body=','.join(self.scroll_ids))
