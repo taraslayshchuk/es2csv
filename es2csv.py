@@ -1,12 +1,12 @@
+import codecs
+import json
 import os
 import time
-import json
-import codecs
+from functools import wraps
+
 import elasticsearch
 import progressbar
 from backports import csv
-from functools import wraps
-
 
 FLUSH_BUFFER = 1000  # Chunk of docs to flush in temp file
 CONNECTION_TIMEOUT = 120
@@ -52,6 +52,8 @@ class Es2csv:
         self.scroll_time = '30m'
 
         self.csv_headers = list(META_FIELDS) if self.opts.meta_fields else []
+        self.header_delimiter = self.opts.header_delimiter or '.'
+        self.big_query_compat = self.opts.big_query
         self.tmp_file = '{}.tmp'.format(opts.output_file)
 
     @retry(elasticsearch.exceptions.ConnectionError, tries=TIMES_TO_TRY)
@@ -171,7 +173,9 @@ class Es2csv:
             bar.finish()
 
     def flush_to_file(self, hit_list):
-        def to_keyvalue_pairs(source, ancestors=[], header_delimeter='.'):
+        header_delimiter = self.header_delimiter
+        big_query_compat = self.big_query_compat
+        def to_keyvalue_pairs(source, ancestors=[]):
             def is_list(arg):
                 return type(arg) is list
 
@@ -188,13 +192,19 @@ class Es2csv:
                 else:
                     [to_keyvalue_pairs(item, ancestors + [str(index)]) for index, item in enumerate(source)]
             else:
-                header = header_delimeter.join(ancestors)
+                header = header_delimiter.join(ancestors)
                 if header not in self.csv_headers:
                     self.csv_headers.append(header)
-                try:
-                    out[header] = '{}{}{}'.format(out[header], self.opts.delimiter, source)
-                except:
-                    out[header] = source
+                if big_query_compat == False:
+                    try:
+                        out[header] = '{}{}{}'.format(out[header], self.opts.delimiter, source)
+                    except:
+                        out[header] = source
+                else:
+                    try:
+                        out[header.replace('@', '_')] = '{}{}{}'.format(out[header], self.opts.delimiter, source)
+                    except:
+                        out[header.replace('@', '_')] = source
 
         with codecs.open(self.tmp_file, mode='a', encoding='utf-8') as tmp_file:
             for hit in hit_list:
@@ -231,6 +241,10 @@ class Es2csv:
             else:
                 print('There is no docs with selected field(s): {}.'.format(','.join(self.opts.fields)))
             os.remove(self.tmp_file)
+
+    def write_to_json(self):
+        if self.num_results > 0:
+            os.rename(self.tmp_file, self.opts.output_file)
 
     def clean_scroll_ids(self):
         try:

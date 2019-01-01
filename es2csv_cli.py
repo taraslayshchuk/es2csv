@@ -11,8 +11,9 @@ usage:           es2csv -q '*' -i _all -e -o ~/file.csv -k -m 100
                  es2csv -q '*' -t dev prod -u http://login:password@kibana.com:6666/es/ -o ~/file.csv
                  es2csv -q '{"query": {"match_all": {}}, "filter":{"term": {"tags": "dev"}}}' -r -u http://login:password@kibana.com:6666/es/ -o ~/file.csv
 """
-import sys
 import argparse
+import sys
+
 import es2csv
 
 __version__ = '5.5.2'
@@ -35,6 +36,9 @@ def main():
     p.add_argument('-k', '--kibana-nested', dest='kibana_nested', action='store_true', help='Format nested fields in Kibana style.')
     p.add_argument('-r', '--raw-query', dest='raw_query', action='store_true', help='Switch query format in the Query DSL.')
     p.add_argument('-e', '--meta-fields', dest='meta_fields', action='store_true', help='Add meta-fields in output.')
+    p.add_argument('-j', '--json', dest='json', action='store_true', help='Output as line-separated JSON instead of CSV')
+    p.add_argument('-l', '--header-delimiter', dest='header_delimiter', type=str, help='Delimiter to use with JSON nested fields')
+    p.add_argument('-b', '--big-query', dest='big_query', action="store_true", help='Export with BigQuery compatibility')
     p.add_argument('--verify-certs', dest='verify_certs', action='store_true', help='Verify SSL certificates. Default is %(default)s.')
     p.add_argument('--ca-certs', dest='ca_certs', default=None, type=str, help='Location of CA bundle.')
     p.add_argument('--client-cert', dest='client_cert', default=None, type=str, help='Location of Client Auth cert.')
@@ -51,7 +55,10 @@ def main():
     es.create_connection()
     es.check_indexes()
     es.search_query()
-    es.write_to_csv()
+    if (opts.json != True):
+        es.write_to_csv()
+    else:
+        es.write_to_json()
     es.clean_scroll_ids()
 
 
