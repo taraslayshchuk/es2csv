@@ -53,6 +53,7 @@ class Es2csv:
 
         self.csv_headers = list(META_FIELDS) if self.opts.meta_fields else []
         self.header_delimiter = self.opts.header_delimiter or '.'
+        self.big_query_compat = self.opts.big_query
         self.tmp_file = '{}.tmp'.format(opts.output_file)
 
     @retry(elasticsearch.exceptions.ConnectionError, tries=TIMES_TO_TRY)
@@ -173,6 +174,7 @@ class Es2csv:
 
     def flush_to_file(self, hit_list):
         header_delimiter = self.header_delimiter
+        big_query_compat = self.big_query_compat
         def to_keyvalue_pairs(source, ancestors=[]):
             def is_list(arg):
                 return type(arg) is list
@@ -193,10 +195,16 @@ class Es2csv:
                 header = header_delimiter.join(ancestors)
                 if header not in self.csv_headers:
                     self.csv_headers.append(header)
-                try:
-                    out[header] = '{}{}{}'.format(out[header], self.opts.delimiter, source)
-                except:
-                    out[header] = source
+                if big_query_compat == False:
+                    try:
+                        out[header] = '{}{}{}'.format(out[header], self.opts.delimiter, source)
+                    except:
+                        out[header] = source
+                else:
+                    try:
+                        out[header.replace('@', '_')] = '{}{}{}'.format(out[header], self.opts.delimiter, source)
+                    except:
+                        out[header.replace('@', '_')] = source
 
         with codecs.open(self.tmp_file, mode='a', encoding='utf-8') as tmp_file:
             for hit in hit_list:

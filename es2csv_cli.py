@@ -38,6 +38,7 @@ def main():
     p.add_argument('-e', '--meta-fields', dest='meta_fields', action='store_true', help='Add meta-fields in output.')
     p.add_argument('-j', '--json', dest='json', action='store_true', help='Output as line-separated JSON instead of CSV')
     p.add_argument('-l', '--header-delimiter', dest='header_delimiter', type=str, help='Delimiter to use with JSON nested fields')
+    p.add_argument('-b', '--big-query', dest='big_query', action="store_true", help='Export with BigQuery compatibility')
     p.add_argument('--verify-certs', dest='verify_certs', action='store_true', help='Verify SSL certificates. Default is %(default)s.')
     p.add_argument('--ca-certs', dest='ca_certs', default=None, type=str, help='Location of CA bundle.')
     p.add_argument('--client-cert', dest='client_cert', default=None, type=str, help='Location of Client Auth cert.')
