@@ -1,12 +1,12 @@
+import codecs
+import json
 import os
 import time
-import json
-import codecs
+from functools import wraps
+
 import elasticsearch
 import progressbar
 from backports import csv
-from functools import wraps
-
 
 FLUSH_BUFFER = 1000  # Chunk of docs to flush in temp file
 CONNECTION_TIMEOUT = 120
@@ -52,6 +52,7 @@ class Es2csv:
         self.scroll_time = '30m'
 
         self.csv_headers = list(META_FIELDS) if self.opts.meta_fields else []
+        self.header_delimiter = self.opts.header_delimiter
         self.tmp_file = '{}.tmp'.format(opts.output_file)
 
     @retry(elasticsearch.exceptions.ConnectionError, tries=TIMES_TO_TRY)
