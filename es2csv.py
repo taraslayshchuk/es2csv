@@ -52,7 +52,7 @@ class Es2csv:
         self.scroll_time = '30m'
 
         self.csv_headers = list(META_FIELDS) if self.opts.meta_fields else []
-        self.header_delimiter = self.opts.header_delimiter
+        self.header_delimiter = self.opts.header_delimiter or '.'
         self.tmp_file = '{}.tmp'.format(opts.output_file)
 
     @retry(elasticsearch.exceptions.ConnectionError, tries=TIMES_TO_TRY)
@@ -173,7 +173,7 @@ class Es2csv:
 
     def flush_to_file(self, hit_list):
         delim = self.header_delimiter
-        def to_keyvalue_pairs(source, ancestors=[], header_delimeter='.'):
+        def to_keyvalue_pairs(source, ancestors=[], header_delimeter):
             def is_list(arg):
                 return type(arg) is list
 
