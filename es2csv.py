@@ -145,7 +145,7 @@ class Es2csv:
                        progressbar.ETA(), '] [',
                        progressbar.FileTransferSpeed(unit='docs'), ']'
                        ]
-            bar = progressbar.ProgressBar(widgets=widgets, maxval=self.num_results).start()
+            bar = progressbar.ProgressBar(widgets=widgets, maxval=(self.opts.max_results if self.opts.max_results else self.num_results)).start()
 
             while total_lines != self.num_results:
                 if res['_scroll_id'] not in self.scroll_ids:
