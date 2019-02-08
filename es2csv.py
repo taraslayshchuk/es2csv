@@ -56,7 +56,7 @@ class Es2csv:
 
     @retry(elasticsearch.exceptions.ConnectionError, tries=TIMES_TO_TRY)
     def create_connection(self):
-        es = elasticsearch.Elasticsearch(self.opts.url, timeout=CONNECTION_TIMEOUT, http_auth=self.opts.auth,
+        es = elasticsearch.Elasticsearch(self.opts.url, http_compress=True, timeout=CONNECTION_TIMEOUT, http_auth=self.opts.auth,
                                          verify_certs=self.opts.verify_certs, ca_certs=self.opts.ca_certs,
                                          client_cert=self.opts.client_cert, client_key=self.opts.client_key)
         es.cluster.health()
@@ -145,7 +145,7 @@ class Es2csv:
                        progressbar.ETA(), '] [',
                        progressbar.FileTransferSpeed(unit='docs'), ']'
                        ]
-            bar = progressbar.ProgressBar(widgets=widgets, maxval=self.num_results).start()
+            bar = progressbar.ProgressBar(widgets=widgets, maxval=(self.opts.max_results if self.opts.max_results else self.num_results)).start()
 
             while total_lines != self.num_results:
                 if res['_scroll_id'] not in self.scroll_ids:
