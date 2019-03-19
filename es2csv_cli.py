@@ -41,6 +41,7 @@ def main():
     p.add_argument('--client-key', dest='client_key', default=None, type=str, help='Location of Client Cert Key.')
     p.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__, help='Show version and exit.')
     p.add_argument('--debug', dest='debug_mode', action='store_true', help='Debug mode on.')
+    p.add_argument('--fix-header', dest='fix_header', action='store_true', help='Replace . to _ and remove @ in the header row.')
 
     if len(sys.argv) == 1:
         p.print_help()

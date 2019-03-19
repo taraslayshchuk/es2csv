@@ -41,6 +41,7 @@ Usage
           [-m INTEGER] [-s INTEGER] [-k] [-r] [-e] [--verify-certs]
           [--ca-certs CA_CERTS] [--client-cert CLIENT_CERT]
           [--client-key CLIENT_KEY] [-v] [--debug]
+          [--fix-header]
 
  Arguments:
   -q, --query QUERY                        Query string in Lucene syntax.               [required]
@@ -64,6 +65,7 @@ Usage
   --client-key CLIENT_KEY                  Location of Client Cert Key.
   -v, --version                            Show version and exit.
   --debug                                  Debug mode on.
+  --fix-header                             Replace . with _ and remove @ in the output csv header row.
   -h, --help                               show this help message and exit
 
 [ `Usage Examples <./docs/EXAMPLES.rst>`_ | `Release Changelog <./docs/HISTORY.rst>`_ ]
