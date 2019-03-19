@@ -172,6 +172,10 @@ class Es2csv:
 
     def flush_to_file(self, hit_list):
         def to_keyvalue_pairs(source, ancestors=[], header_delimeter='.'):
+            # Use _ for Oracle database
+            if self.opts.fix_header == True:
+                header_delimeter = '_'
+                
             def is_list(arg):
                 return type(arg) is list
 
@@ -188,7 +192,12 @@ class Es2csv:
                 else:
                     [to_keyvalue_pairs(item, ancestors + [str(index)]) for index, item in enumerate(source)]
             else:
-                header = header_delimeter.join(ancestors)
+                # Remove @ sign from ES's metadata column heads
+                if self.opts.fix_header == True:
+                    header = header_delimeter.join(ancestors).replace('@', '')
+                else:
+                    header = header_delimeter.join(ancestors)
+
                 if header not in self.csv_headers:
                     self.csv_headers.append(header)
                 try:
