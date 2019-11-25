@@ -112,7 +112,7 @@ class Es2csv:
             search_args['q'] = query
 
         if '_all' not in self.opts.fields:
-            search_args['_source_include'] = ','.join(self.opts.fields)
+            search_args['_source_includes'] = self.opts.fields
             self.csv_headers.extend([unicode(field, "utf-8") for field in self.opts.fields if '*' not in field])
 
         if self.opts.debug_mode:
@@ -124,7 +124,7 @@ class Es2csv:
             print('Sorting by: {}.'.format(', '.join(self.opts.sort)))
 
         res = self.es_conn.search(**search_args)
-        self.num_results = res['hits']['total']
+        self.num_results = res['hits']['total']['value']
 
         print('Found {} results.'.format(self.num_results))
         if self.opts.debug_mode:
@@ -209,7 +209,7 @@ class Es2csv:
             self.num_results = sum(1 for line in codecs.open(self.tmp_file, mode='r', encoding='utf-8'))
             if self.num_results > 0:
                 output_file = codecs.open(self.opts.output_file, mode='a', encoding='utf-8')
-                csv_writer = csv.DictWriter(output_file, fieldnames=self.csv_headers)
+                csv_writer = csv.DictWriter(output_file, fieldnames=self.csv_headers, delimiter=unicode(self.opts.delimiter))
                 csv_writer.writeheader()
                 timer = 0
                 widgets = ['Write to csv ',
@@ -237,3 +237,4 @@ class Es2csv:
             self.es_conn.clear_scroll(body=','.join(self.scroll_ids))
         except:
             pass
+
