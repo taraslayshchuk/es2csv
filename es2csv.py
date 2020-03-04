@@ -6,7 +6,7 @@ import elasticsearch
 import progressbar
 from backports import csv
 from functools import wraps
-
+from packaging import version
 
 FLUSH_BUFFER = 1000  # Chunk of docs to flush in temp file
 CONNECTION_TIMEOUT = 120
@@ -61,6 +61,7 @@ class Es2csv:
                                          client_cert=self.opts.client_cert, client_key=self.opts.client_key)
         es.cluster.health()
         self.es_conn = es
+        self.es_info = es.info()
 
     @retry(elasticsearch.exceptions.ConnectionError, tries=TIMES_TO_TRY)
     def check_indexes(self):
@@ -124,7 +125,10 @@ class Es2csv:
             print('Sorting by: {}.'.format(', '.join(self.opts.sort)))
 
         res = self.es_conn.search(**search_args)
-        self.num_results = res['hits']['total']['value']
+        if version.parse(self.es_info['version']['number']) < version.parse("7.0.0"):
+            self.num_results = res['hits']['total']
+        else:
+            self.num_results = res['hits']['total']['value']
 
         print('Found {} results.'.format(self.num_results))
         if self.opts.debug_mode:
