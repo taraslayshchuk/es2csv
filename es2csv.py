@@ -124,7 +124,7 @@ class Es2csv:
             print('Sorting by: {}.'.format(', '.join(self.opts.sort)))
 
         res = self.es_conn.search(**search_args)
-        self.num_results = res['hits']['total']
+        self.num_results = res['hits']['total']['value']
 
         print('Found {} results.'.format(self.num_results))
         if self.opts.debug_mode:
@@ -234,6 +234,7 @@ class Es2csv:
 
     def clean_scroll_ids(self):
         try:
-            self.es_conn.clear_scroll(body=','.join(self.scroll_ids))
+            for sid in self.scroll_ids:
+                self.es_conn.clear_scroll(scroll_id=sid))
         except:
             pass
